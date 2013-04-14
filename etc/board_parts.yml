@@ -1,0 +1,70 @@
+---
+#start types
+- :name: Five Points
+  :tile_type: :start
+#end types
+- :name: Arkham Island
+  :tile_type: :end
+- :name: Blackgate Isle
+  :tile_type: :end
+- :name: Wayne Manor
+  :tile_type: :end
+#bodies types
+- :name: Amusment Mile
+  :tile_type: :bodies
+- :name: The Bowry
+  :tile_type: :bodies
+- :name: Financial District
+  :tile_type: :bodies
+- :name: The Docks
+  :tile_type: :bodies
+- :name: Gotham Square
+  :tile_type: :bodies
+- :name: Grand Avenue
+  :tile_type: :bodies
+- :name: Robinson Park
+  :tile_type: :bodies
+- :name: Park Row
+  :tile_type: :bodies
+- :name: The Cauldron
+  :tile_type: :bodies
+#attachment types
+- :nane: GCPD HQ
+  :type_type: :attachment
+  :attachment: Five Points
+- :name: The Batcave
+  :tile_type: :attachment
+  :attachment: Wayne Manor
+- :name: Arkham Asylum
+  :tile_type: :attachment
+  :attachment: Arkham Island
+- :name: Blackgate Penitentiary
+  :tile_type: :attachment
+  :attachment: Blackgate Isle
+- :name: Joker's Funhouse
+  :tile_type: :attachment
+  :attachment: Amusment Row
+- :name: The Stacked Deck
+  :tile_type: :attachment
+  :attachment: The Bowry
+- :name: Wayne Tower
+  :tile_type: :attachment
+  :attachment: Financial District
+- :name: Ace Chemical Company
+  :tile_type: :attachment
+  :attachment: The Docks
+- :name: Gotham Museum
+  :tile_type: :attachment
+  :attachment: Gotham Square
+- :name: Diamond District
+  :tile_type: :attachment
+  :attachment: Grand Avenue
+- :name: Crime Alley
+  :tile_type: :attachment
+  :attachment: Park Row
+- :name: Botanical Gardens
+  :tile_type: :attachment
+  :attachment: Robinson Park
+- :name: My Alibi
+  :tile_type: :attachment
+  :attachment: The Cauldron
