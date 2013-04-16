@@ -9,11 +9,8 @@ module StreetsOfGotham
       @tiles = []
       tile_definitions.flatten.each do |tile_options|
         name        = tile_options[:name]
-        type        = tile_options[:type]
-        effects     = tile_options.fetch(:effects, [])
-        tags        = tile_options.fetch(:tags, [])
-        attachments = tile_options.fetch(:attachments, [])
-        tile_def = TILE_DEF_OBJ.new(name, type, effects, tags, attachments)
+        type        = tile_options[:tile_type]
+        tile_def = TILE_DEF_OBJ.new(name, type, tile_options)
         @tiles_by_name[name] = tile_def
         @tiles_by_type[type] << tile_def
         @tiles << tile_def

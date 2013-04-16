@@ -5,9 +5,11 @@ module StreetsOfGotham
       @map_elements = ::StreetsOfGotham.config.map_elements.load_content #::StreetsOfGotham::TileCollection
       @map_layout = ::StreetsOfGotham.config.map_layout.load_content     #::StreetsOfGotham::MapStyle
 
+      warn @map_board.inspect
+      warn @map_elements.inspect
       warn @map_layout.inspect
-      @tiles = @map_layout.generate(@map_elements, @map_board.positions_for_assignment)
 
+      #@map_layout.generate(@map_elements, @map_board.positions_for_assignment)
     end
   end
 end

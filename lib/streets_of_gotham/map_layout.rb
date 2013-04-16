@@ -21,9 +21,16 @@ module StreetsOfGotham
     def generate(map_parts, positions)
       all = []
       @parts_by_type.each do |key, *list|
-        map_parts.parts_of_type(key).shuffle.each do |spots|
-          all << TILE_OBJECT.mk_tile(positions, spots, options)
-        end
+        warn "=" * 40
+        warn key.inspect
+        warn "-" * 40
+        warn list.inspect
+        warn "-" * 40
+        warn map_parts.parts_of_type(key).inspect
+        warn "=" * 40
+        #map_parts.parts_of_type(key).shuffle.each do |spots|
+        #  all << TILE_OBJECT.mk_tile(positions, spots, options)
+        #end
       end
       #TODO Make this into a GameMap object
       all

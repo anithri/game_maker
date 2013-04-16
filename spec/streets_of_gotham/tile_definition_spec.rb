@@ -3,7 +3,7 @@ require "spec_helper"
 describe StreetsOfGotham::TileDefinition do
   subject { StreetsOfGotham::TileDefinition }
   before(:all) do
-    @tile_def = StreetsOfGotham::TileDefinition.new("A",:test,[],[],[])
+    @tile_def = StreetsOfGotham::TileDefinition.new("A",:test)
   end
 
 

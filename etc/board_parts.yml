@@ -31,40 +31,53 @@
 #attachment types
 - :nane: GCPD HQ
   :type_type: :attachment
-  :attachment: Five Points
+  :attachment:
+  - Five Points
 - :name: The Batcave
   :tile_type: :attachment
-  :attachment: Wayne Manor
+  :attachment:
+  - Wayne Manor
 - :name: Arkham Asylum
   :tile_type: :attachment
-  :attachment: Arkham Island
+  :attachment:
+  - Arkham Island
 - :name: Blackgate Penitentiary
   :tile_type: :attachment
-  :attachment: Blackgate Isle
+  :attachment:
+  - Blackgate Isle
 - :name: Joker's Funhouse
   :tile_type: :attachment
-  :attachment: Amusment Row
+  :attachment:
+  - Amusment Row
 - :name: The Stacked Deck
   :tile_type: :attachment
-  :attachment: The Bowry
+  :attachment:
+  - The Bowry
 - :name: Wayne Tower
   :tile_type: :attachment
-  :attachment: Financial District
+  :attachment:
+  - Financial District
 - :name: Ace Chemical Company
   :tile_type: :attachment
-  :attachment: The Docks
+  :attachment:
+  - The Docks
 - :name: Gotham Museum
   :tile_type: :attachment
-  :attachment: Gotham Square
+  :attachment:
+  - Gotham Square
 - :name: Diamond District
   :tile_type: :attachment
-  :attachment: Grand Avenue
+  :attachment:
+  - Grand Avenue
 - :name: Crime Alley
   :tile_type: :attachment
-  :attachment: Park Row
+  :attachment:
+  - Park Row
 - :name: Botanical Gardens
   :tile_type: :attachment
-  :attachment: Robinson Park
+  :attachment:
+  - Robinson Park
 - :name: My Alibi
   :tile_type: :attachment
-  :attachment: The Cauldron
+  :attachment:
+  - The Cauldron
