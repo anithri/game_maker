@@ -1,0 +1,11 @@
+---
+:game_name: Streets Of Gotham
+:map_file: map.yml
+:board_parts_file: board_parts.yml
+:layout_file:
+  - map_layout1.yml
+  - map_layout2.yml
+  - map_layout3.yml
+  - map_layout4.yml
+  - map_layout5.yml
+  - map_layout6.yml
