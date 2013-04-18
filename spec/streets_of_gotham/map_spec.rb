@@ -1,10 +1,11 @@
 require "spec_helper"
 
-describe StreetsOfGotham::Map do
+describe StreetsOfGotham::Map, focus: true  do
   subject { StreetsOfGotham::Map }
+  let(:position_class) {StreetsOfGotham::MapPosition}
   before(:all) do
     @simple_map = StreetsOfGotham::Map.new("Test Map", [{coordinate: 1, borders:[1]}])
-    @simple_position = @simple_map.spaces.first
+    @simple_position = @simple_map.at_coordinate(1)
   end
 
   describe "#initialize" do
@@ -13,15 +14,9 @@ describe StreetsOfGotham::Map do
 
   describe "accessors" do
     it {@simple_map.board_name.should eq "Test Map" }
-    it {@simple_map.spaces.should be_a Array }
-    it {@simple_map.spaces.should have(1).item }
-    it {@simple_map.spaces.first.should be_a StreetsOfGotham::MapPosition}
-
-  end
-
-  describe ".as_map" do
-    it {@simple_map.as_map.should be_a Hash}
-    it {@simple_map.as_map.keys.should == [1] }
+    it {@simple_map.spaces.should be_a Hash }
+    it {@simple_map.spaces.keys.should have(1).item }
+    it {@simple_map.spaces[1].should be_a position_class }
   end
 
 end

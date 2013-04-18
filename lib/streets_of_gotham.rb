@@ -8,6 +8,7 @@ require "streets_of_gotham/map"
 
 require "streets_of_gotham/board"
 require "streets_of_gotham/board_maker"
+require "streets_of_gotham/base_type"
 
 require "streets_of_gotham/game"
 require "streets_of_gotham/game_maker"
@@ -17,6 +18,10 @@ require "streets_of_gotham/config_loader"
 require "streets_of_gotham/board_parts_loader"
 require "streets_of_gotham/parts_collection"
 require "streets_of_gotham/part"
+
+class GameParseError < StandardError
+end
+require "streets_of_gotham/base_type"
 
 module StreetsOfGotham
 
@@ -40,7 +45,6 @@ module StreetsOfGotham
   def self.mk_game
     StreetsOfGotham::GameMaker.mk_game
   end
-
 
 end
 

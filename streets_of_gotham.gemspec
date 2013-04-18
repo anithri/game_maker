@@ -8,10 +8,10 @@ Gem::Specification.new do |spec|
   spec.version       = StreetsOfGotham::VERSION
   spec.authors       = ["Scott M Parrish"]
   spec.email         = ["anithri@gmail.com"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
+  spec.description   = %q{Streets of Gotham is an attempt to use programnming as a board game design tool.  With an eye towards arranging things such that testing of game rules, assembling a game into another medium like a rulebook or a game board, and to allowing it to be used as the game engine of a computer game.}
+  spec.summary       = %q{Batman Mashup game as programming experiment and game design excercise}
   spec.homepage      = ""
-  spec.license       = "MIT"
+  spec.license       = ""
 
   spec.files         = `git ls-files`.split($/)
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }

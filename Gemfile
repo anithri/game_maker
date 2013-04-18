@@ -3,6 +3,8 @@ source 'https://rubygems.org'
 # Specify your gem's dependencies in ruzo.gemspec
 gemspec
 
+gem 'facets'
+
 group :development do
   gem 'irbtools', require: false
   gem 'bond', require: false
