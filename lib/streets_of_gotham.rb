@@ -2,14 +2,14 @@ require "singleton"
 require "yaml"
 require 'ostruct'
 
+require "streets_of_gotham/config_loader"
 require "streets_of_gotham/version"
+
 require "streets_of_gotham/map_position"
 require "streets_of_gotham/map"
 
 require "streets_of_gotham/board"
 require "streets_of_gotham/board_maker"
-require "streets_of_gotham/base_type"
-require "streets_of_gotham/inherited_map"
 
 require "streets_of_gotham/game"
 require "streets_of_gotham/game_maker"
@@ -22,29 +22,14 @@ require "streets_of_gotham/part"
 
 class GameParseError < StandardError
 end
-require "streets_of_gotham/base_type"
 
 module StreetsOfGotham
 
-  CONFIG_DIR = File.dirname(__FILE__) + "/../etc"
-  DEFAULT_CONFIG = ::YAML.load_file("#{CONFIG_DIR}/game_config.yml")
-  DEFAULT_CONFIG[:data_dir] ||= CONFIG_DIR
-  $game_config = OpenStruct.new(DEFAULT_CONFIG.dup)
+  DEFAULT_CONFIG_FILE = File.dirname(__FILE__) + "/../etc/game_config.yml"
 
-  def self.config
-    $game_config
-  end
-
-  def self.reset_config
-    self.config.marshal_load(DEFAULT_CONFIG.dup)
-  end
-
-  def self.load_config(options_hash = {})
-    $game_config.marshal_load(options_hash)
-  end
-
-  def self.mk_game
-    StreetsOfGotham::GameMaker.mk_game
+  def self.mk_game(game_config_file = DEFAULT_CONFIG_FILE)
+    game_config = StreetsOfGotham::Config.load_file(game_config_file)
+    StreetsOfGotham::GameMaker.mk_game(game_config)
   end
 
 end
