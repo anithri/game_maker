@@ -4,21 +4,18 @@ module StreetsOfGotham
 
     @@position_obj = ::StreetsOfGotham::MapPosition
 
-    def mk_position(options)
-      @@position_obj.new(options)
-    end
-
     def self.valid?(options)
       is_valid = true
       is_valid &&= options.is_a?(Hash)
       is_valid &&= options.has_key?(:board_name)
-      is_valid &&= options.has_key?(:board_name)
-      is_valid &&= options[:board_name].is_a?(Array)
-
+      is_valid &&= options.has_key?(:positions)
+      is_valid &&= options[:positions].is_a?(Array)
+      is_valid
     end
 
     def initialize(options)
-      @board_name = options[:board_name] = board_name
+      @board_name = options[:board_name]
+      positions = options[:positions]
       @spaces = {}
       positions.each do |raw|
         position = mk_position(raw)

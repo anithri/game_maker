@@ -1,7 +1,7 @@
 require "spec_helper"
 
-describe StreetsOfGotham::Map do
-  subject { StreetsOfGotham::Map }
+describe StreetsOfGotham::InheritedMap do
+  subject { StreetsOfGotham::InheritedMap }
   let(:position_class) {StreetsOfGotham::MapPosition}
   before(:all) do
     @simple_options = {board_name: "Test Map",

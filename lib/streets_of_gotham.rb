@@ -9,6 +9,7 @@ require "streets_of_gotham/map"
 require "streets_of_gotham/board"
 require "streets_of_gotham/board_maker"
 require "streets_of_gotham/base_type"
+require "streets_of_gotham/inherited_map"
 
 require "streets_of_gotham/game"
 require "streets_of_gotham/game_maker"
