@@ -1,10 +1,10 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'streets_of_gotham/version'
+require 'game_maker/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "streets_of_gotham"
+  spec.name          = "game_maker"
   spec.version       = StreetsOfGotham::VERSION
   spec.authors       = ["Scott M Parrish"]
   spec.email         = ["anithri@gmail.com"]
