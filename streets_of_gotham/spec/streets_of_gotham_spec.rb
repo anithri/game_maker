@@ -4,6 +4,6 @@ describe StreetsOfGotham do
   subject {StreetsOfGotham}
 
   describe "#mk_game" do
-    it {subject.mk_game.should be_a StreetsOfGotham::Game}
+    it {subject.game_from.should be_a StreetsOfGotham::Game}
   end
 end

@@ -1,93 +1,66 @@
 require 'hashery'
 require 'yaml'
-
+require 'facets/string/camelcase'
+require 'facets/string/titlecase'
 module GameMaker
   module ConfigLoader
 
-    RESERVED_KEYS = [:root_dir, :game_name]
+    RESERVED_KEYS = [:game_dir, :game_name, :game_config_file, :game_module_name,
+                     :game_maker_class_name, :game_class_name]
 
-    # @raise [GameParseError] when passed a string that is neither an
-    #   existing filename or a yaml string
-    # @overload load(io_obj, opts = {})
-    #   @param [#read] file IO object than can be #read
-    #   @param [Hash] opts Additional settings to add to config
-    # @overload load(file_name, opts = {})
-    #   @param [String] file filename
-    #   @param [Hash] opts Additional settings to add to config
-    # @overload load(dir_name, opts = {})
-    #   @param [String] file directory that contains "etc/game_config.yml"
-    #   @param [Hash] opts Additional settings to add to config
-    # @overload load(yaml_string, opts = {})
-    #   @param [String] file string containing yaml
-    #   @param [Hash] opts Additional settings to add to config
-    # @option opts [String] :game_name core name of the game.
-    # @option opts [String] :root_dir root dir containing game definition
-    # @return [::Hashery::OpenCascade]
-    def self.load(file, opts = {})
-      config = nil
-      if file.respond_to?(:read)
-        config = self.parse_yaml(file)
-      elsif File.exists?(file)
-        config = self.parse_yaml(File.open(file,"r"))
-        root_dir = File.dirname(file) + "/../"
-        config[:root_dir] = root_dir unless config.has_key?(:root_dir)
-      elsif Dir.exists?(file)
-        config = self.parse_yaml(File.open(file + "/etc/game_config.yml"))
-        config[:root_dir] = file.end_with?("/") ? file : file + "/"
-      elsif file.respond_to?(:start_with?) && file.start_with?("---")
-        config = self.parse_yaml(file)
+    # @param [Hash] opts options to be passed to ConfigLoader  Config loader will use the first of
+      # the four opts listed that it finds and ignore the other 3, finally passing config_opts whit
+      # whatever options was used.
+    # @option opts [String]  :filename    the name of a game config file
+    # @option opts [dirname] :dirname     the name of the top directory of your game
+    # @option opts [String]  :yaml_string the string containing the yaml for config
+    # @option opts [#read]   :io           an object to read yaml from
+    # @option opts [Hash]    :config_opts a hash to be merged with the game config file options
+    def self.load(opts)
+      config_opts = opts[:config_opts] || {}
+      if opts.has_key? :filename
+        return self.load_from_file(opts[:filename], config_opts)
+      elsif opts.has_key? :dirname
+        return self.load_from_dir(opts[:dirname], config_opts)
+      elsif opts.has_key? :yaml_string
+        return self.load_from_string(opts[:yaml_string], config_opts)
+      elsif opts.has_key? :io
+        return self.load_from_io(opts[:io], config_opts)
       else
-        raise GameParseError.new("Unable to find file or bad" +
-                                 "yaml formatting: #{file}")
+        raise GameParseError.new(
+                  "No :filename, :dirname, :yaml_string, or :io key found in: #{opts.inspect} "
+              )
       end
-      config = opts.merge(config)
-      process(config, file)
+    end
+
+    # @return [Object]
+    def self.load_from_file(filename, opts = {})
+      raise GameParseError.new("No such file exists: #{filename}") unless File.exists?(filename)
+      config = opts.merge(self.parse_yaml(File.open(filename)))
+      config[:game_dir] ||= File.dirname(filename)
+      config[:game_name] ||= File.basename(config[:game_dir]).titlecase
+      config[:game_config_file] = filename
+      config
+    end
+
+    def self.load_from_dir(dirname, opts = {})
+      raise GameParseError.new("No dir found: #{dirname}") unless Dir.exists?(dirname)
+      opts[:game_dir] ||= dirname
+      self.load_from_file(dirname + "/game_config.yml", opts)
+    end
+
+    def self.load_from_string(yaml_string, opts = {})
+      opts.merge(self.parse_yaml(yaml_string))
+    end
+
+    def self.load_from_io(readable_obj, opts = {})
+      opts.merge(self.parse_yaml(readable_obj))
     end
 
     private
 
-    def self.bootstrap_settings(config, possible_root_dir)
-      config.game_name = get_game_name(config) unless config.game_name?
-    end
-
     def self.parse_yaml(readable_obj)
       ::YAML.load(readable_obj)
-    end
-
-    def self.process(raw_config, raw)
-      set_root_dir(raw_config)
-      set_game_name(raw_config)
-      #TODO code for fetching or constructing core_game_class
-      config = ::Hashery::OpenCascade[raw_config]
-    end
-
-    def self.set_root_dir(raw_config, raw)
-      unless raw_config.has_key?(:root_dir) && File.directory?(raw_config[:root_dir])
-        raise GameParseError.new("Could not determine :root_dir")
-      end
-    end
-
-    def self.set_game_name(config)
-      return config[:game_name] if config.has_key?(:game_name)
-      if config.has_key?("root_dir")
-        config[:game_name] = File.split(config[:root_dir]).last
-        return config[:game_name]
-      end
-      if (config.keys - RESERVED_KEYS).count == 1
-        config[:game_name] = (config.keys - RESERVED_KEYS).first
-        return config[:game_name]
-      end
-      raise GameParseError.new("Could not determine :game_name")
-    end
-
-    def get_game_class(config)
-      game_name = config.game_name
-      class_name = config.main_class? ? config.main_class : "Game"
-      maker_name = config.main_class? ? config.main_class : "GameMaker"
-    end
-
-    def self.get_game_name(config)
-      return config.keys.first if config.keys.count == 1
     end
   end
 end

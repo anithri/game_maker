@@ -2,44 +2,62 @@ require "spec_helper"
 
 describe GameMaker::ConfigLoader do
   subject { GameMaker::ConfigLoader }
+  let(:no_filename_error){[GameParseError, /^No such file exists/]}
+  let(:no_dirname_error){[GameParseError, /^No dir found/]}
+
+  shared_examples "a config object" do
+    it {config.should be_a Hash}
+    it {config.fetch(:foo).should eq 123}
+    it {config.fetch(:bar).should eq "hi"}
+    it {config.fetch(:baz)[:tee].should eq "hey"}
+    it {config.fetch(:baz)[:vee].should eq "there"}
+  end
+
+  describe ".load_from_file" do
+    it_should_behave_like "a config object" do
+      let(:config){subject.load_from_file(TEST_GAME_CONFIG_FILE)}
+    end
+    it "should raise an exception if given a bad filename" do
+      expect{subject.load_from_file("no_such_filename.yml")}.to raise_error *no_filename_error
+    end
+  end
+
+  describe ".load_from_dir" do
+    it_should_behave_like "a config object" do
+      let(:config){subject.load_from_dir(TEST_GAME_DIR)}
+    end
+    it "should raise an exception if given a bad dirname" do
+      expect{subject.load_from_dir("no_such_dir")}.to raise_error *no_dirname_error
+    end
+    it "should raise an exception if given a directory with no game_config.yml" do
+      expect{subject.load_from_dir(TEST_GAME_DIR + "/..")}.to raise_error *no_filename_error
+    end
+
+  end
+
+  describe ".load_from_string" do
+    it_should_behave_like "a config object" do
+      let(:config){subject.load_from_string(TEST_GAME_YAML_STRING, game_dir: TEST_GAME_DIR)}
+    end
+  end
+
+  describe ".load_from_io" do
+    it_should_behave_like "a config object" do
+      let(:config){subject.load_from_io(::StringIO.new(TEST_GAME_YAML_STRING),
+                                      game_dir: TEST_GAME_DIR)}
+    end
+  end
 
   describe ".load" do
     before(:all) do
-      @good_yaml_string = "---\n:foo: 123\n:bar: hi\n:baz:\n  :tee: hey\n  :vee: there\n"
-      @string_io = ::StringIO.new(@good_yaml_string)
-      @file_name = File.dirname(__FILE__) + "/../support/test_read.yml"
-      @loader = GameMaker::ConfigLoader
+      [:load_from_file, :load_from_dir, :load_from_string, :load_from_io].each do |loader|
+        ::GameMaker::ConfigLoader.stub(loader)
+      end
     end
 
-    context "when passed an IO object" do
-      before(:each) do
-        @string_io.rewind
-      end
-      it {@loader.load(@string_io).should be_a ::Hashery::OpenCascade}
-      it {@loader.load(@string_io).foo.should eq 123}
-      it {@loader.load(@string_io).bar.should eq "hi"}
-      it {@loader.load(@string_io).baz.tee.should eq "hey"}
-      it {@loader.load(@string_io).baz.vee.should eq "there"}
-    end
-
-    context "when passed string" do
-      before :all do
-        @good_cascade = @loader.load(@file_name)
-      end
-      it {@good_cascade.should be_a ::Hashery::OpenCascade}
-      it {@good_cascade.foo.should eq 123}
-      it {@good_cascade.bar.should eq "hi"}
-      it {@good_cascade.baz.tee.should eq "hey"}
-      it {@good_cascade.baz.vee.should eq "there"}
-    end
-
-    context "when passed a string that is not a file name or yaml" do
-      let(:read_from_bad_filename) do
-        subject.load("nofile_like_it_anywhere.yml")
-      end
-      it "should raise an exception" do
-        expect{read_from_bad_filename}.to raise_error GameParseError
-      end
+    it "should call :load_from_file if called with :filename" do
+      subject.should_receive(:load_from_file)
+      subject.load(filename: "t.yml")
     end
   end
 end

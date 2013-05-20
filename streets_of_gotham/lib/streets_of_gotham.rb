@@ -30,7 +30,7 @@ module StreetsOfGotham
   def self.mk_game(game_config_file = DEFAULT_CONFIG_FILE)
     game_config = StreetsOfGotham::Config.load_file(game_config_file)
     game_maker = game_config.game_maker
-    game_maker.mk_game(game_config)
+    game_maker.game_from(game_config)
     #StreetsOfGotham::GameMaker.mk_game(game_config)
   end
 

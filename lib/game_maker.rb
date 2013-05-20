@@ -1,5 +1,6 @@
 require "game_maker/version"
 require "game_maker/config_loader"
+require "game_maker/game"
 
 class GameParseError < StandardError
 end
@@ -9,12 +10,63 @@ module GameMaker
   DEFAULT_CONFIG_FILE = File.dirname(__FILE__) +
                         "/../streets_of_gotham/etc/game_config.yml"
 
-  def self.mk_game(game_config_file = DEFAULT_CONFIG_FILE)
-    game_config = GameMaker::ConfigLoader.load(game_config_file)
-    #game_maker = game_config.game_maker
-    #game_maker.mk_game(game_config)
-    #StreetsOfGotham::GameMaker.mk_game(game_config)
+  # @param [Hash] opts options to be passed to ConfigLoader.  See ConfigLoader.load for more
+  # details
+  # @return [Ganme]
+  def self.game_from(opts = {})
+    config = ConfigLoader.load(opts)
+    set_defaults(config)
+    check_validity(config)
+    mk_game(mk_config(config))
   end
 
+  protected
+
+  def self.mk_config(raw_config)
+    ::Hashery::OpenCascade[raw_config]
+  end
+
+  def self.set_defaults(config)
+    config[:game_dir] ||= File.dirname(config[:game_config_file]) if config[:game_config_file]
+    config[:game_name] ||= File.basename(config[:game_dir]).titlecase if config[:game_dir]
+    config[:game_module_name] ||= self.to_s
+    config[:game_class_name] ||= [config[:game_module_name],"Game"].join("::")
+  end
+
+  def self.check_validity(config)
+    check_game_dir    config[:game_dir]
+    check_game_module config[:game_module_name], config
+    check_game_class  config[:game_class_name], config
+  end
+
+  def self.mk_game(config)
+    config[:_game_class].new(config)
+  end
+
+  def self.check_game_dir(dir)
+    return dir if game_dir_ok?(dir)
+    raise GameParseError.new("Could not determine :game_dir") unless dir
+    raise GameParseError.new("No dir found: #{dir}")
+  end
+
+  def self.game_dir_ok?(dir)
+    ! dir.nil? && File.directory?(dir)
+  end
+
+  def self.check_game_module(module_name, config)
+    begin
+      config[:_game_module] ||=  Module.const_get(module_name)
+    rescue NameError
+      raise GameParseError.new("Module could not be found: #{module_name}")
+    end
+  end
+
+  def self.check_game_class(class_name, config)
+    begin
+      config[:_game_class] ||= Module.const_get(class_name)
+    rescue
+      raise GameParseError.new("Class could not be found: #{class_name}")
+    end
+  end
 end
 
