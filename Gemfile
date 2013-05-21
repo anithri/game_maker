@@ -17,5 +17,5 @@ group :development, :test do
   gem 'guard-rspec'
   gem 'fuubar'
   gem 'rspec', '~> 2.13.0'
-  gem 'vcr', '~> 2.4.0'
+  gem 'vcr', '~> 2.5.0'
 end

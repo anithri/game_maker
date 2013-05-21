@@ -1,4 +1,6 @@
 require "game_maker/version"
+require "game_maker/utils"
+require "game_maker/define_component"
 require "game_maker/config_loader"
 require "game_maker/game"
 
@@ -31,6 +33,7 @@ module GameMaker
     config[:game_name] ||= File.basename(config[:game_dir]).titlecase if config[:game_dir]
     config[:game_module_name] ||= self.to_s
     config[:game_class_name] ||= [config[:game_module_name],"Game"].join("::")
+    config[:game_part_files] ||= []
   end
 
   def self.check_validity(config)
