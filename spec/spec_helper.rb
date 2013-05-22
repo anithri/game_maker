@@ -1,6 +1,7 @@
 require 'rspec'
 require 'stringio'
 require 'game_maker'
+require_relative '../streets_of_gotham/lib/streets_of_gotham'
 
 RSpec.configure do |config|
   config.treat_symbols_as_metadata_keys_with_true_values = true

@@ -16,12 +16,12 @@
 # :game_module_name entry
 # valid if: module exists
 # defaults to: game_name upper_camelcased
-#:game_module_name: StreetsOfGotham
+:game_module_name: StreetsOfGotham
 
 # :game_class_name entry
 # valid if: class exists in module of :game_module_name
 # defaults to Game
-#:game_class_name: Game
+:game_class_name: Game
 
 # :game_part_files entry
 # contains list of other *_parts.yml files to read

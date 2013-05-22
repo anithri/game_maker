@@ -6,7 +6,6 @@ class GameParseError < StandardError
 end
 
 module GameMaker
-
   DEFAULT_CONFIG_FILE = File.dirname(__FILE__) +
                         "/../streets_of_gotham/etc/game_config.yml"
 
@@ -22,6 +21,7 @@ module GameMaker
 
   protected
 
+  #TODO Find a way to genericize this to allow other config stores to be created
   def self.mk_config(raw_config)
     ::Hashery::OpenCascade[raw_config]
   end
@@ -36,7 +36,7 @@ module GameMaker
   def self.check_validity(config)
     check_game_dir    config[:game_dir]
     check_game_module config[:game_module_name], config
-    check_game_class  config[:game_class_name], config
+    check_game_class  config[:_game_module],config[:game_class_name]
   end
 
   def self.mk_game(config)
@@ -61,9 +61,9 @@ module GameMaker
     end
   end
 
-  def self.check_game_class(class_name, config)
+  def self.check_game_class(module_name, class_name)
     begin
-      config[:_game_class] ||= Module.const_get(class_name)
+      config[:_game_class] ||= module_name.const_get(class_name)
     rescue
       raise GameParseError.new("Class could not be found: #{class_name}")
     end
