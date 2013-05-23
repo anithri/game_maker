@@ -1,17 +1,17 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'game_maker/version'
+require 'streets_of_gotham/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "game_maker"
+  spec.name          = "streets_of_gotham"
   spec.version       = StreetsOfGotham::VERSION
   spec.authors       = ["Scott M Parrish"]
   spec.email         = ["anithri@gmail.com"]
-  spec.description   = %q{Streets of Gotham is an attempt to use programnming as a board game design tool.  With an eye towards arranging things such that testing of game rules, assembling a game into another medium like a rulebook or a game board, and to allowing it to be used as the game engine of a computer game.}
-  spec.summary       = %q{Batman Mashup game as programming experiment and game design excercise}
+  spec.description   = %q{A Cooperative Board Game Definition for use with GameMaster}
+  spec.summary       = %q{This is an example game definition}
   spec.homepage      = ""
-  spec.license       = ""
+  spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }

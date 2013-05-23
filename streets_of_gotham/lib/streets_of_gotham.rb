@@ -1,12 +1,11 @@
-require "game_maker"
+require "game_master"
 require_relative 'streets_of_gotham/version'
+require_relative 'streets_of_gotham/game'
 
 module StreetsOfGotham
-  require_relative 'streets_of_gotham/game'
-  def self.game_from(opts = {})
-    binding.pry
+  def self.game_from(opts)
     opts[:dirname] ||= File.dirname(__FILE__) + '/..'
-    GameMaker.game_from(opts)
+    GameMaster.game_from(opts)
   end
 end
 

@@ -1,7 +1,7 @@
 require "spec_helper"
 
-describe GameMaker do
-  subject { GameMaker }
+describe GameMaster do
+  subject { GameMaster }
   let(:no_filename_error){[GameParseError, /^No such file exists/]}
   let(:no_dirname_error){[GameParseError, /^No dir found/]}
   let(:no_game_dir_error){[GameParseError, /^Could not determine :game_dir$/]}
@@ -9,10 +9,9 @@ describe GameMaker do
   let(:no_class_error){[GameParseError, /^Class could not be found/]}
 
   describe ".game_from" do
-
     shared_examples "a game object" do
       it "and a game object" do
-        game.should be_a GameMaker::Game
+        game.should be_a GameMaster::Game
         game.config.should be_a Hashery::OpenCascade
         game.config.has_key?(:game_dir)        .should be_true
         game.config.has_key?(:game_name)       .should be_true

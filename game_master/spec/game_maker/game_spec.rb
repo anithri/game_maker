@@ -1,7 +1,7 @@
 require "spec_helper"
 
-describe GameMaker::Game do
-  subject{GameMaker::Game}
+describe GameMaster::Game do
+  subject{GameMaster::Game}
   describe ".initialize" do
 
     context "sets of accessors" do

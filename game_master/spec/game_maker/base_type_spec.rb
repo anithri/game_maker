@@ -1,6 +1,6 @@
 require "spec_helper"
 
-#describe GameMaker::BaseType do
+#describe GameMaster::BaseType do
   #subject { StreetsOfGotham::BaseType }
   #before(:all){subject.reset!}
   #

@@ -1,4 +1,4 @@
-module GameMaker
+module GameMaster
   class Game
     attr_reader :config
 

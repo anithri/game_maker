@@ -2,7 +2,7 @@ require 'hashery'
 require 'yaml'
 require 'facets/string/camelcase'
 require 'facets/string/titlecase'
-module GameMaker
+module GameMaster
   module ConfigLoader
 
     RESERVED_KEYS = [:game_dir, :game_name, :game_config_file, :game_module_name,

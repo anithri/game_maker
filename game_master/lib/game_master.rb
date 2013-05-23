@@ -1,11 +1,11 @@
-require "game_maker/version"
-require "game_maker/config_loader"
-require "game_maker/game"
+require "game_master/version"
+require "game_master/config_loader"
+require "game_master/game"
 
 class GameParseError < StandardError
 end
 
-module GameMaker
+module GameMaster
   DEFAULT_CONFIG_FILE = File.dirname(__FILE__) +
                         "/../streets_of_gotham/etc/game_config.yml"
 
@@ -13,7 +13,7 @@ module GameMaker
   # details
   # @return [Ganme]
   def self.game_from(opts = {})
-    config = ConfigLoader.load(opts)
+    config = GameMaster::ConfigLoader.load(opts)
     set_defaults(config)
     check_validity(config)
     mk_game(mk_config(config))
@@ -30,13 +30,13 @@ module GameMaker
     config[:game_dir] ||= File.dirname(config[:game_config_file]) if config[:game_config_file]
     config[:game_name] ||= File.basename(config[:game_dir]).titlecase if config[:game_dir]
     config[:game_module_name] ||= self.to_s
-    config[:game_class_name] ||= [config[:game_module_name],"Game"].join("::")
+    config[:game_class_name] ||= "Game"
   end
 
   def self.check_validity(config)
     check_game_dir    config[:game_dir]
     check_game_module config[:game_module_name], config
-    check_game_class  config[:_game_module],config[:game_class_name]
+    check_game_class  config[:_game_module], config[:game_class_name], config
   end
 
   def self.mk_game(config)
@@ -61,11 +61,11 @@ module GameMaker
     end
   end
 
-  def self.check_game_class(module_name, class_name)
+  def self.check_game_class(module_name, class_name, config)
     begin
       config[:_game_class] ||= module_name.const_get(class_name)
     rescue
-      raise GameParseError.new("Class could not be found: #{class_name}")
+      raise GameParseError.new("Class could not be found: #{module_name}::#{class_name}")
     end
   end
 end

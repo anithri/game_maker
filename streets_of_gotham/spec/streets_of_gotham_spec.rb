@@ -2,8 +2,10 @@ require "spec_helper"
 
 describe StreetsOfGotham do
   subject {StreetsOfGotham}
-  let(:game){subject.game_from}
-  describe "#mk_game" do
-    it {game.should be_a StreetsOfGotham::Game}
+  describe "#game_from" do
+    it "should return a Game object" do
+      game = subject.game_from({})
+      game.should be_a StreetsOfGotham::Game
+    end
   end
 end

@@ -1,5 +1,5 @@
 require "spec_helper"
 
-describe GameMaker do
+describe GameMaster do
 
 end

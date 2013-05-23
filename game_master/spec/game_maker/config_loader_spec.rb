@@ -1,7 +1,7 @@
 require "spec_helper"
 
-describe GameMaker::ConfigLoader do
-  subject { GameMaker::ConfigLoader }
+describe GameMaster::ConfigLoader do
+  subject { GameMaster::ConfigLoader }
   let(:no_filename_error){[GameParseError, /^No such file exists/]}
   let(:no_dirname_error){[GameParseError, /^No dir found/]}
 
@@ -50,14 +50,16 @@ describe GameMaker::ConfigLoader do
 
   describe ".load" do
     before(:all) do
+      @test_module = GameMaster::ConfigLoader.dup
+
       [:load_from_file, :load_from_dir, :load_from_string, :load_from_io].each do |loader|
-        ::GameMaker::ConfigLoader.stub(loader)
+        @test_module.stub(loader)
       end
     end
 
     it "should call :load_from_file if called with :filename" do
-      subject.should_receive(:load_from_file)
-      subject.load(filename: "t.yml")
+      @test_module.should_receive(:load_from_file)
+      @test_module.load(filename: "t.yml")
     end
   end
 end

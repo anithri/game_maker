@@ -1,8 +1,8 @@
 module StreetsOfGotham
   class Game
-    attr_reader :board
-    def initialize(board)
-      @board = board
+    attr_reader :config
+    def initialize(config)
+      @config = config
     end
   end
 end
