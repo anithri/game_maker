@@ -1,6 +1,8 @@
-require "game_master/version"
-require "game_master/config_loader"
-require "game_master/game"
+require "game_maker/version"
+require "game_maker/utils"
+require "game_maker/define_component"
+require "game_maker/config_loader"
+require "game_maker/game"
 
 class GameParseError < StandardError
 end
@@ -31,6 +33,7 @@ module GameMaster
     config[:game_name] ||= File.basename(config[:game_dir]).titlecase if config[:game_dir]
     config[:game_module_name] ||= self.to_s
     config[:game_class_name] ||= "Game"
+    config[:game_part_files] ||= []
   end
 
   def self.check_validity(config)
