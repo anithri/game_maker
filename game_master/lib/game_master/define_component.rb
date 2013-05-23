@@ -1,9 +1,9 @@
 require 'facets/string/snakecase'
 require 'facets/string/camelcase'
 
-module GameMaker
+module GameMaster
   class DefineComponent
-    include GameMaker::Utils
+    include GameMaster::Utils
 
     attr_reader :orig_def, :game_dir, :game_module, :name, :config_file, :definition_method,
                 :class_name, :maker_module_name, :my_class, :my_maker

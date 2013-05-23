@@ -1,7 +1,7 @@
 require "spec_helper"
 
-describe GameMaker::Utils do
-  subject{GameMaker::Utils}
+describe GameMaster::Utils do
+  subject{GameMaster::Utils}
 
   describe ".module_exists?" do
     it "should return false if module does not exist" do
@@ -9,7 +9,7 @@ describe GameMaker::Utils do
     end
 
     it "should return the Module if module exists" do
-      subject.module_exists?("GameMaker::Utils").should eq subject
+      subject.module_exists?("GameMaster::Utils").should eq subject
     end
   end
 

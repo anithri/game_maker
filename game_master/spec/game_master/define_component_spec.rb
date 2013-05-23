@@ -1,7 +1,7 @@
 require "spec_helper"
 
-describe GameMaker::DefineComponent do
-  subject {GameMaker::DefineComponent}
+describe GameMaster::DefineComponent do
+  subject {GameMaster::DefineComponent}
 
   describe "#initialize" do
     it "should return an object with this class" do

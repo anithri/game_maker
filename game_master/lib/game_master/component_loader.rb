@@ -1,4 +1,4 @@
-module GameMaker
+module GameMaster
   module ComponentLoader
     class << self
       def load_component(component_def, game_dir, game_module,)

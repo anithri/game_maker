@@ -1,4 +1,4 @@
-module GameMaker
+module GameMaster
   module Utils
     def find_module(*possible_module_names)
       possible_module_names.map{|m| module_exists?(m)}.find{|m| m}
