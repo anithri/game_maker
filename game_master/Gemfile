@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 gemspec
 gem 'hashery'
 gem 'facets'
-
+gem 'yell'
 group :development do
   gem 'irbtools', require: false
   gem 'bond', require: false

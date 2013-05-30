@@ -8,14 +8,14 @@ module GameMaster
     attr_reader :orig_def, :game_dir, :game_module, :name, :config_file, :definition_method,
                 :class_name, :maker_module_name, :my_class, :my_maker
 
-    def initialize(orig_def, game_dir, game_module, skip_defaults: false, skip_validations: false)
+    def initialize(orig_def, game_dir, game_module, opts)
       @orig_def             = orig_def
       @game_dir             = game_dir
       @game_module          = game_module
       @definition_method    = define_type
       self.send(@definition_method)
-      set_defaults unless skip_defaults
-      validate_component_definition unless skip_validations
+      set_defaults unless opts[:skip_defaults]
+      validate_component_definition unless opts[:skip_validations]
     end
 
     def definition

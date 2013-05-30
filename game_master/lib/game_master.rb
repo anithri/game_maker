@@ -1,8 +1,13 @@
-require "game_maker/version"
-require "game_maker/utils"
-require "game_maker/define_component"
-require "game_maker/config_loader"
-require "game_maker/game"
+require 'yell'
+require "game_master/version"
+require "game_master/loggable"
+require "game_master/utils"
+require "game_master/attribute"
+require "game_master/base_attributes"
+require "game_master/base_components"
+require "game_master/game"
+require "game_master/define_component"
+require "game_master/config_loader"
 
 class GameParseError < StandardError
 end
@@ -15,6 +20,9 @@ module GameMaster
   # details
   # @return [Ganme]
   def self.game_from(opts = {})
+    Yell.new :stdout, name: "GameMaster"
+    Yell::Repository.loggers.default = Yell["GameMaster"]
+
     config = GameMaster::ConfigLoader.load(opts)
     set_defaults(config)
     check_validity(config)

@@ -6,4 +6,6 @@ describe StreetsOfGotham::Board do
   describe "#initialize" do
     it {simple_board.should be_a subject}
   end
+
+  descr
 end

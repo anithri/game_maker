@@ -8,3 +8,13 @@ RSpec.configure do |config|
 end
 
 Dir["./spec/support/**/*.rb"].each {|f| require f}
+
+class NullLogger
+  def info(msg)
+  end
+  def warn(msg)
+  end
+  def error(msg)
+  end
+end
+Yell::Repository.loggers['GameMaster'] = NullLogger.new
