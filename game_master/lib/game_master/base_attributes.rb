@@ -51,13 +51,13 @@ module GameMaster
       end
 
       def methods_for_attribute(name)
-        define_method(name){self.class.all_children[name].value}
-        define_method("#{name}?"){self.class.all_children[name].value}
-        define_method("#{name}="){|new_value| self.class.all_children[name].value= new_value}
-        define_method("#{name}_type"){self.class.all_children[name].type}
-        define_method("#{name}_default"){self.class.all_children[name].default}
+        define_method(name){self.class.all_children[:attribute][name].value}
+        define_method("#{name}?"){self.class.all_children[:attribute][name].value}
+        define_method("#{name}="){|new_value| self.class.all_children[:attribute][name].value= new_value}
+        define_method("#{name}_type"){self.class.all_children[:attribute][name].type}
+        define_method("#{name}_default"){self.class.all_children[:attribute][name].default}
         define_method("#{name}_default=") do
-          |new_value| self.class.all_children[name].default= new_value
+          |new_value| self.class.all_children[:attribute][name].default= new_value
         end
 
       end

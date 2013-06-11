@@ -1,6 +1,6 @@
 require 'yell'
 
-require 'facets'
+#require 'facets'
 require 'facets/module/mattr'
 require 'facets/string/snakecase'
 

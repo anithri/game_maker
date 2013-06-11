@@ -24,6 +24,10 @@ module GameMaster
 
         end
       end
+
+      def all_children
+        self.class.all_children
+      end
     end
 
     module ClassMethods

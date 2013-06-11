@@ -47,13 +47,13 @@ module GameMaster
       end
 
       def prep_collection(name, type, parents, opts)
-        all_children[name] = collection_class.new(name, type, parents, opts)
+        all_children[:collection][name] = collection_class.new(name, type, parents, opts)
       end
 
       def methods_for_collection(name)
-        define_method(name){self.class.all_children[name].to_ary}
-        define_method("#{name}<<"){self.class.all_children[name].add(value)}
-        define_method("#{name}_type"){self.class.all_children[name].type}
+        define_method(name){self.class.all_children[:collection][name].to_ary}
+        define_method("#{name}<<"){self.class.all_children[:collection][name].add(value)}
+        define_method("#{name}_type"){self.class.all_children[:collection][name].type}
       end
     end
   end

@@ -3,7 +3,9 @@ require "spec_helper"
 describe StreetsOfGotham::Board do
   subject{StreetsOfGotham::Board}
   describe ".all_children" do
-    it{subject.all_children.keys.should include(:description,:tiles)}
+    it{subject.all_children.keys.should include(:attribute,:collection)}
+    it{subject.all_children[:attribute].keys.should eq [:description]}
+    it{subject.all_children[:collection].keys.should eq [:tiles]}
   end
 
   describe "initialize" do
@@ -17,6 +19,7 @@ describe StreetsOfGotham::Board do
     context "when passed a hash with a description key" do
       let(:board){subject.new(description: "Woot")}
       it "should set the description attribute" do
+        binding.pry
         board.description.should eq "Woot"
       end
       #TODO PICK UP HERE
