@@ -1,3 +1,4 @@
+
 module GameMaster
   class Attribute
     include Loggable
@@ -12,7 +13,8 @@ module GameMaster
     #   @return [Hash<Boolean>] options of the attribute
     # @!attribute [r] value
     #   @return [Symbol] value of the attribute
-    attr_reader :name, :type, :default, :opts, :value
+    # @!attribute [rw] parents
+    attr_reader :name, :type, :default, :opts, :value, :parents
 
     # @param [#to_sym] name name of attribute
     # @param [Class] type expected class of attribute
@@ -23,8 +25,9 @@ module GameMaster
     # @options opts [Boolean] :warn_only if true, don't raise error if type is mismatched
     # @options opts [#each<#to_s>] :parents Array of hierarchy this attribute belongs to if any
     # @return [GameMaker::Attribute]
-    def initialize(name, type, default, opts = {})
-      @name, @type, @default, @opts = name, type, default, opts
+    def initialize(name, type, default, my_parents = [], opts = {})
+      @name, @type, @default, @opts = name, type, default, opts.dup
+      set_parents(my_parents)
       @value = @default
       logger.info defined_message
     end
@@ -46,17 +49,16 @@ module GameMaster
       end
     end
 
-    # @return [Array<#to_s>] of contents of opts[:parents] or an empty array
-    def parents
-      return *opts.fetch(:parents, [])
-    end
-
     # @return [String] elemts of parents are e.to_s.upper_camelcase, have the name added and then
     # joined by "::"
     # @example if #parents return [GameMaster,:foo_bar, "Baz"], and name was :test
     #    #full_name #=> "GameMaster::FooBar::Baz::Test"
     def full_name
       [parents, name].flatten.map{|e| e.to_s.upper_camelcase}.join("::")
+    end
+
+    def set_parents(*arr)
+      @parents = arr.flatten.compact
     end
 
     private

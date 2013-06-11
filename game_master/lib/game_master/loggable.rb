@@ -10,11 +10,18 @@ module GameMaster
       def logger
         Yell['GameMaster']
       end
+
+      def indent
+        "  " * parents.count
+      end
     end
 
     module ClassMethods
       def logger
         Yell['GameMaster']
+      end
+      def indent(depth = 0)
+        "  " * depth
       end
     end
   end

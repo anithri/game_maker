@@ -51,7 +51,6 @@ describe GameMaster::ConfigLoader do
   describe ".load" do
     before(:all) do
       @test_module = GameMaster::ConfigLoader.dup
-
       [:load_from_file, :load_from_dir, :load_from_string, :load_from_io].each do |loader|
         @test_module.stub(loader)
       end

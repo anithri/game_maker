@@ -1,6 +1,3 @@
-require 'facets'
-require 'facets/module/mattr'
-require 'facets/string/snakecase'
 
 module StreetsOfGotham
   class BaseType
