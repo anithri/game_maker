@@ -25,9 +25,11 @@ module GameMaster
     # @options opts [Boolean] :warn_only if true, don't raise error if type is mismatched
     # @options opts [#each<#to_s>] :parents Array of hierarchy this attribute belongs to if any
     # @return [GameMaker::Attribute]
-    def initialize(name, type, default, my_parents = [], opts = {})
-      @name, @type, @default, @opts = name, type, default, opts.dup
-      set_parents(my_parents)
+    def initialize(name, parents, opts = {})
+      @name, @parents = name, parents
+      @type = opts.fetch(:type,Object)
+      @default = opts.fetch(:default, nil)
+      @opts = opts.dup
       @value = @default
       logger.info defined_message
     end
