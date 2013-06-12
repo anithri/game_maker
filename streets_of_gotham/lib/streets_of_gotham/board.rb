@@ -1,8 +1,11 @@
+require 'streets_of_gotham/game'
+require 'streets_of_gotham/tile'
 module StreetsOfGotham
   class Board
     include ::GameMaster::Base
+    parent StreetsOfGotham::Game
     define_attribute :description, type: String, default: ""
-    define_collection :tiles, collection: true
+    define_collection :tiles, type: StreetsOfGotham::Tile
   end
 end
 
