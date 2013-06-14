@@ -31,6 +31,15 @@ module GameMaster
         self.class.required_children.all?{|rc| opts.has_key?(rc)}
       end
 
+      def unique_keys_for(name, value)
+        key = self.send("#{name}_unique_on")
+        if key.is_a? Array
+          return key.inject([]){|arr,k| arr<< value[k]}
+        else
+          return value[key]
+        end
+      end
+
     end
 
     module ClassMethods
@@ -47,6 +56,10 @@ module GameMaster
         children.keys.select{|c| children[c].fetch(:required, false)}
       end
 
+      # @param [#to_sym] name Name of child
+      # @param [Hash] opts additional options
+      # @options opts [Class] :type expected class elements of the collection is expected to have.  If the class has a .new method, an instance of the class will be instantiated
+      # @options opts [Object] :default the default value of the child if no value is given
       def define_attribute(name, opts = {})
         opts[:default] ||= nil
         opts[:type] ||= Object
@@ -54,17 +67,22 @@ module GameMaster
         add_attribute_methods(name,opts[:type],opts[:default])
       end
 
+      # @param [#to_sym] name Name of child
+      # @param [Hash] opts additional options
+      # @options opts [Class] :type expected class elements of the collection is expected to have.  If the class has a .new method, an instance of the class will be instantiated
+      # @options opts [Object,Array<Object>] the attribute or list of attributes that define a single unique value, used to create a hash key to store the object
       def define_collection(name, opts = {})
+        name = name.to_sym
         opts[:type] ||= Object
         opts[:collection] = true
-        opts[:unique] ||= nil
+        opts[:unique_on] ||= nil
         children[name] = opts
-        if opts[:unique]
+        if opts[:unique_on]
           #use a Hash
-          add_hash_collection_methods
+          add_hash_collection_methods(name, opts[:type], opts[:unique_on])
         else
           #Use an Array
-          add_collection_methods(name, opts[:type])
+          add_array_collection_methods(name, opts[:type])
         end
       end
 
@@ -107,7 +125,7 @@ module GameMaster
         EOS
       end
 
-      def add_collection_methods(name, type)
+      def add_array_collection_methods(name, type)
         class_eval(<<-EOS, __FILE__, __LINE__ + 1)
 
           cattr_accessor :#{name}_type
@@ -126,6 +144,29 @@ module GameMaster
         EOS
       end
 
+      def add_hash_collection_methods(name, type, unique_on)
+        class_eval(<<-EOS, __FILE__, __LINE__ + 1)
+
+          cattr_accessor :#{name}_type, :#{name}_unique_on
+          @@#{name}_type = #{type}
+          @@#{name}_unique_on = #{unique_on.inspect}
+
+          def #{name}
+            @#{name} ||= {}
+          end
+
+          def add_#{name}(new_value)
+            unique_key = unique_keys_for(#{name.inspect},new_value)
+            new_value = #{collection_assignment_string(type)}
+            #{name}[unique_key] = new_value
+          end
+
+          def find_#{name}(key)
+            #{name}.fetch(key.flatten, nil)
+          end
+
+        EOS
+      end
 
       def attribute_assignment_string(type)
         if type.methods.include?(:new) && type != Object
@@ -142,6 +183,8 @@ module GameMaster
           "new_value"
         end
       end
+
+
     end
   end
 end
