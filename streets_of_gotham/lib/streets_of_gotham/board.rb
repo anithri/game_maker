@@ -5,7 +5,8 @@ module StreetsOfGotham
     include ::GameMaster::Base
     parent StreetsOfGotham::Game
     define_attribute :description, type: String, default: ""
-    define_collection :tiles, type: StreetsOfGotham::Tile
+    define_collection :tiles, type: StreetsOfGotham::Tile, unique: :name
+
   end
 end
 

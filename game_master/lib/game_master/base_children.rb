@@ -7,7 +7,6 @@ module GameMaster
 
     module InstanceMethods
       def initialize_children(opts = {})
-        self.class.handle_error(:required,self.class,opts.inspect) unless has_all_required_fields?(opts)
         self.class.children_names.each do |child|
           next unless opts.has_key?(child)
           if children[child].fetch(:collection, false)
@@ -24,11 +23,6 @@ module GameMaster
 
       def children
         self.class.children
-      end
-
-      def raise_assignment_error(name,type,new_value)
-        return if self.config.fetch(:ignore_assignment_errors)
-
       end
 
       private
@@ -63,8 +57,15 @@ module GameMaster
       def define_collection(name, opts = {})
         opts[:type] ||= Object
         opts[:collection] = true
+        opts[:unique] ||= nil
         children[name] = opts
-        add_collection_methods(name, opts[:type])
+        if opts[:unique]
+          #use a Hash
+          add_hash_collection_methods
+        else
+          #Use an Array
+          add_collection_methods(name, opts[:type])
+        end
       end
 
       def handle_error(error_type, *args)
