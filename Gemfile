@@ -5,6 +5,7 @@ gemspec
 gem 'hashery'
 gem 'facets'
 gem 'yell'
+gem 'attrio', path: '../attrio'
 group :development do
   gem 'irbtools', require: false
   gem 'bond', require: false

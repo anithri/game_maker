@@ -1,3 +1,4 @@
+
 module StreetsOfGotham
   class Game
     attr_reader :config

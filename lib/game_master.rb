@@ -1,4 +1,5 @@
 require 'yell'
+require 'attrio'
 
 #require 'facets'
 require 'facets/module/mattr'
@@ -7,10 +8,6 @@ require 'game_master/error'
 require "game_master/version"
 require "game_master/loggable"
 require "game_master/utils"
-require "game_master/attribute"
-require "game_master/collection"
-require 'game_master/children'
-require "game_master/base_children"
 require "game_master/base"
 require "game_master/game"
 require "game_master/define_component"

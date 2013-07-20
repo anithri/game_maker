@@ -2,18 +2,22 @@ require 'game_master'
 module GameMaster
   module Base
     def self.included base
-      base.send :include, GameMaster::BaseChildren
       base.send :include, InstanceMethods
       base.send :include, GameMaster::Loggable
+      base.send :include, Attrio
       base.extend ClassMethods
       base.send :attr_reader, :config
     end
 
     module InstanceMethods
       def initialize(config = {})
-        raise ArgumentError.new("#{self.name} called with #{config}, but should have been called with a Hash") unless config.is_a?(Hash)
+        raise ArgumentError.new("#{self.name} called with #{config.inspect}, but should have been called with a Hash") unless config.is_a?(Hash)
         @config = config
-        initialize_children(config)
+        super()
+        config.each do |key, value|
+          self.send("#{key}=", value) if self.respond_to?("#{key}=")
+          self.send("add_#{key}", value) if self.respond_to?("add_#{key}")
+        end
       end
     end
 
