@@ -1,5 +1,6 @@
 require 'yell'
 require 'attrio'
+require 'pathname'
 
 #require 'facets'
 require 'facets/module/mattr'
@@ -11,7 +12,6 @@ require "game_master/utils"
 require "game_master/base"
 require "game_master/game"
 require "game_master/define_component"
-require "game_master/config_loader"
 
 class GameParseError < StandardError
 end
@@ -20,20 +20,31 @@ class GameDefinitionError < StandardError
 end
 
 module GameMaster
+  autoload :Config, 'game_master/config'
+  autoload :ConfigLoader, 'game_master/config_loader'
+
   DEFAULT_CONFIG_FILE = File.dirname(__FILE__) +
                         "/../streets_of_gotham/etc/game_config.yml"
 
-  # @param [Hash] opts options to be passed to ConfigLoader.  See ConfigLoader.load for more
-  # details
+  # @param [Hash] config options to be passed to Config.
+  # @option config [String] :filename name of a file to boot config with
+  # @option config [String] :dirname  the name of the top directory of your game, will try and load game_config.yml or <dirname>.yml
+  # @option config [String] :yaml_string the string c/lib/game_master.rb:28ontaining the yaml for config
+  # @option config [#read]  :io           an object to read yaml from
+  # @option config [Hash]   :initial_opts a hash containing game definitions to be used as initial content, defaults to {}
+  # The first key found in the list of [:filename, :dirname, :yaml_string, :io] is used to load the game_config.yml file and the rest are ignored.
+  # @raise GameParseError if a problem happens during any stage of the Config Load Stage
+  # @raise GameDefinitionError is a problem happens while creating a game from the Config
   # @return [Ganme]
-  def self.game_from(opts = {})
+  def self.game_from(config)
     Yell.new :stdout, name: "GameMaster"
     Yell::Repository.loggers.default = Yell["GameMaster"]
 
-    config = GameMaster::ConfigLoader.load(opts)
-    set_defaults(config)
-    check_validity(config)
-    mk_game(mk_config(config))
+    config = GameMaster::Config.load(config)
+    mk_game(config)
+    #set_defaults(config)
+    #check_validity(config)
+    #mk_game(mk_config(config))
   end
 
   protected

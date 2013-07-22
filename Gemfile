@@ -14,7 +14,7 @@ group :development do
   gem 'nokogiri'
 end
 
-group :development, :test do
+group :development, :test_dir do
   gem 'guard-rspec'
   gem 'fuubar'
   gem 'rspec', '~> 2.13.0'
