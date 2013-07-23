@@ -27,3 +27,6 @@ game_part.
 if I have a deck of 90 cards, and some combination of 4 different players
 from among 6 sources, how often can each card/player combination produce a
 success.  Should help balancing games with more complex rules.
+
+## License
+GameMaster is released under the [MIT License](http://www.opensource.org/licenses/MIT).
