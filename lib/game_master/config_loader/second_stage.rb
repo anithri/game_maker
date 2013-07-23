@@ -1,67 +1,50 @@
-
 module GameMaster
   module ConfigLoader
     module SecondStage
 
-      def self.load(opts, config)
-        if opts.has_key? :filename
-          return self.load_from_file(opts[:filename])
-        elsif opts.has_key? :dirname
-          return self.load_from_dir(opts[:dirname])
-        elsif opts.has_key? :yaml_string
-          return self.load_from_string(opts[:yaml_string])
-        elsif opts.has_key? :io
-          return self.load_from_io(opts[:io])
+      def self.load(config)
+        self.normalize_game_dir(config_obj)
+        self.normalize_game_name(config_obj)
+        self.normalize_game_module(config_obj)
+        self.normalize_game_class(config_obj)
+        self.normalize_game_maker_class(config_obj)
+
+        config_obj.set_boot_stage(:second_stage)
+
+      end
+
+      def self.normalize_game_dir(config_obj)
+        if config_obj.config.game_dir?
+          config_obj.config.game_dir = self.determine_dir_name(config_obj.config.game_dir)
         else
-          raise GameParseError.new("No :filename, :dirname, :yaml_string, or :io key found in: #{opts.inspect} ")
+          config_obj.config.game_dir = false
         end
       end
 
-      protected
-      # @return [Object]
-      def self.load_from_file(filename)
-        file = filename.is_a?(Pathname) ? filename : Pathname.new(filename).expand_path
-        raise GameParseError.new("No such file exists: #{filename}") unless file.file?
-        contents = self.parse_yaml(file.open)
-        contents[:boot_method] = :file
-        contents[:boot_data] = filename
-        contents[:game_dir] ||= file.dirname
-        contents[:game_config_file] = file
-        contents
+      def self.normalize_game_name(config_obj)
+
+        
+
+        config_obj.config.game_name = config_obj.config.game_name.titlecase
       end
 
-      def self.load_from_dir(dirname)
-        dir = dirname.is_a?(Pathname) ? dirname : Pathname.new(dirname).expand_path
-        raise GameParseError.new("No dir found: #{dirname}") unless dir.directory?
-        config = self.load_from_file(dir + "game_config.yml")
-        config[:boot_method] = :dir
-        config[:boot_data] = dirname
-        config
+      def self.normalize_game_module(config_obj)
       end
 
-      def self.load_from_string(yaml_string)
-        #TODO catch malformed string errors and reraise as parse error
-        config = self.parse_yaml(yaml_string)
-        config[:boot_method] = :string
-        config[:boot_data] = yaml_string
-        config[:game_dir] = false
-        config
+      def self.normalize_game_class(config_obj)
       end
 
-      def self.load_from_io(readable_obj)
-        #TODO catch bad IO and reraise as parse error
-        config = self.parse_yaml(readable_obj)
-        config[:boot_method] = :io
-        config[:boot_data] = readable_obj
-        config[:game_dir] = false
-        config
+      def self.normalize_game_maker_class(config_obj)
+      end
+
+
+      def self.determine_dir_name(orig_name)
+        return false unless orig_name
+        return orig_name if orig_name.is_a?(Pathname)
+        return Pathname.new(orig_name).expand_path
+        raise GameParseError.new("Couldn't convert #{orig_name.inspect} to a Pathname")
       end
 
     end
-
-    def self.parse_yaml(readable_obj)
-      ::YAML.load(readable_obj)
-    end
-
   end
 end

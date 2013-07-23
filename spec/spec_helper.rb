@@ -22,7 +22,7 @@ TEST_GAME_YAML_STRING = File.read(TEST_GAME_CONFIG_FILE)
 
 module ::TestGame
   class Game
-    include GameMaster::Base
+    include GameMaster::Master
   end
 end
 

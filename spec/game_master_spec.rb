@@ -3,8 +3,24 @@ require "spec_helper"
 describe GameMaster do
   subject { GameMaster }
 
-end
+  describe ".game_from" do
 
+    shared_examples "a game object" do
+        it{game.should be_a_kind_of GameMaster::Master}
+        #it{game.config.has_key?(:game_dir)    .should be_true}
+        #it{game.config.game_name?   .should be_true}
+        #it{game.config.game_module? .should be_true}
+        #it{game.config.game_class?  .should be_true}
+    end
+
+    context "when passed a dirname" do
+      it_should_behave_like "a game object" do
+        let(:game){subject.game_from({dirname: TEST_GAME_DIR})}
+      end
+    end
+
+  end
+end
 __END__
 
 describe GameMaster do
