@@ -6,13 +6,16 @@ module GameMaster
       base.send :include, GameMaster::Loggable
       base.send :include, Attrio
       base.extend ClassMethods
-      base.send :attr_reader, :config
+      base.send :attr_reader, :config, :boot, :runtime, :game_data
     end
 
     module InstanceMethods
       def initialize(config = {})
         raise ArgumentError.new("#{self.class} called with #{config.inspect}, but should have been called with a GameMaster::Config") unless config.is_a?(GameMaster::Config)
-        @config = config
+        @config = config.config
+        @boot = config.boot
+        @runtime = config.runtime
+        @game_data = config.game
         super()
         config.game.each do |key, value|
           self.send("#{key}=", value) if self.respond_to?("#{key}=")
