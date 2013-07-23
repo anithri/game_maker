@@ -1,5 +1,6 @@
 require "spec_helper"
 
+__END__
 describe GameMaster::Base do
   let(:test_class) do
     Class.new do

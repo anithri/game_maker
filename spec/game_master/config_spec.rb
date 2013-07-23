@@ -1,5 +1,6 @@
 require 'spec_helper'
 
+__END__
 describe GameMaster::Config do
   subject { GameMaster::Config }
   it { subject.new.should be_a subject }

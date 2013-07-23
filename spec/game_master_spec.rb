@@ -2,6 +2,13 @@ require "spec_helper"
 
 describe GameMaster do
   subject { GameMaster }
+
+end
+
+__END__
+
+describe GameMaster do
+  subject { GameMaster }
   let(:no_filename_error){[GameParseError, /^No such file exists/]}
   let(:no_dirname_error){[GameParseError, /^No dir found/]}
   let(:no_game_dir_error){[GameParseError, /^Could not determine :game_dir$/]}

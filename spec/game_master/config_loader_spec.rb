@@ -2,6 +2,13 @@ require "spec_helper"
 
 describe GameMaster::ConfigLoader do
   subject { GameMaster::ConfigLoader }
+
+end
+
+
+__END__
+describe GameMaster::ConfigLoader do
+  subject { GameMaster::ConfigLoader }
   let(:no_filename_error){[GameParseError, /^No such file exists/]}
   let(:no_dirname_error){[GameParseError, /^No dir found/]}
 

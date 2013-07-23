@@ -1,5 +1,6 @@
 require "spec_helper"
 
+__END__
 describe GameMaster::DefineComponent do
   subject {GameMaster::DefineComponent}
 

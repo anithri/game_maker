@@ -1,5 +1,6 @@
 require 'spec_helper'
 
+__END__
 describe GameMaster::Config do
   subject{GameMaster::Config}
   let(:initial_config){{filename: TEST_GAME_CONFIG_FILE}}
