@@ -20,6 +20,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "hashery"
+  spec.add_dependency "hash-deep-merge"
   spec.add_dependency "facets"
   spec.add_dependency "yell" 
   spec.add_dependency "attrio"

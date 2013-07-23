@@ -1,7 +1,8 @@
 ---
-:game_module_name: GameMaster
-:foo: 123
-:bar: hi
-:baz:
-  :tee: hey
-  :vee: there
+:game_module: TestGame
+:game:
+  :foo: 123
+  :bar: hi
+  :baz:
+    :tee: hey
+    :vee: there

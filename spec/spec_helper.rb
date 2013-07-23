@@ -16,11 +16,13 @@ end
 
 Dir["./spec/support/**/*.rb"].each {|f| require f}
 
-TEST_GAME_DIR = File.dirname(__FILE__) + "/support/test_game"
-TEST_GAME_CONFIG_FILE = TEST_GAME_DIR + "/game_config.yml"
+TEST_GAME_DIR = Pathname(File.dirname(__FILE__)) + "support/test_game"
+TEST_GAME_CONFIG_FILE = TEST_GAME_DIR + "game_config.yml"
 TEST_GAME_YAML_STRING = File.read(TEST_GAME_CONFIG_FILE)
+
 module ::TestGame
   class Game
+    include GameMaster::Base
   end
 end
 

@@ -7,10 +7,10 @@ describe GameMaster::ConfigLoader do
 
   shared_examples "a config object" do
     it {config.should be_a Hash}
-    it {config.fetch(:foo).should eq 123}
-    it {config.fetch(:bar).should eq "hi"}
-    it {config.fetch(:baz)[:tee].should eq "hey"}
-    it {config.fetch(:baz)[:vee].should eq "there"}
+    it {config[:game][:foo].should eq 123}
+    it {config[:game][:bar].should eq "hi"}
+    it {config[:game][:baz][:tee].should eq "hey"}
+    it {config[:game][:baz][:vee].should eq "there"}
   end
 
   describe ".load_from_file" do
@@ -30,21 +30,20 @@ describe GameMaster::ConfigLoader do
       expect{subject.load_from_dir("no_such_dir")}.to raise_error *no_dirname_error
     end
     it "should raise an exception if given a directory with no game_config.yml" do
-      expect{subject.load_from_dir(TEST_GAME_DIR + "/..")}.to raise_error *no_filename_error
+      expect{subject.load_from_dir(TEST_GAME_DIR + "..")}.to raise_error *no_filename_error
     end
 
   end
 
   describe ".load_from_string" do
     it_should_behave_like "a config object" do
-      let(:config){subject.load_from_string(TEST_GAME_YAML_STRING, game_dir: TEST_GAME_DIR)}
+      let(:config){subject.load_from_string(TEST_GAME_YAML_STRING)}
     end
   end
 
   describe ".load_from_io" do
     it_should_behave_like "a config object" do
-      let(:config){subject.load_from_io(::StringIO.new(TEST_GAME_YAML_STRING),
-                                      game_dir: TEST_GAME_DIR)}
+      let(:config){subject.load_from_io(::StringIO.new(TEST_GAME_YAML_STRING))}
     end
   end
 

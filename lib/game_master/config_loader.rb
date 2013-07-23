@@ -1,7 +1,9 @@
+require 'hash_deep_merge'
 require 'hashery'
 require 'yaml'
 require 'facets/string/camelcase'
 require 'facets/string/titlecase'
+
 module GameMaster
   module ConfigLoader
 
@@ -44,8 +46,8 @@ module GameMaster
 
     def self.load_from_dir(dirname)
       dir = dirname.is_a?(Pathname) ? dirname : Pathname.new(dirname).expand_path
-      raise GameParseError.new("No dir found: #{dirname}") unless dir.dir?
-      config = self.load_from_file(dir + "/game_config.yml")
+      raise GameParseError.new("No dir found: #{dirname}") unless dir.directory?
+      config = self.load_from_file(dir + "game_config.yml")
       config[:boot_method] = :dir
       config[:boot_data] = dirname
       config

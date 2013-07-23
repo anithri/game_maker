@@ -1,3 +1,4 @@
+require 'hash_deep_merge'
 require 'hashery'
 require 'yaml'
 require 'facets/string/camelcase'
@@ -11,6 +12,7 @@ module GameMaster
       raise ArgumentError unless [boot,config,game,runtime].all?{|e| e.is_a?(Hash)}
       @game    = self.mk_config(game)
       @boot    = self.mk_config(boot)
+      @boot.original_config = config
       @config  = self.mk_config(config)
       @runtime = self.mk_config(runtime)
     end
@@ -24,32 +26,27 @@ module GameMaster
                         opts.fetch(:game,{}),
                         {}
       )
+      config.boot.initial_config = config.config
       config.load_first_stage
-      config.set_defaults
-      config.check_validity
       config.load_second_stage
+      config.load_third_stage
+      config.load_fourth_stage
 
       config
     end
 
-    def boot
-      config.boot
-    end
-
     def load_first_stage
-      first_stage = GameMaster::ConfigLoader.load(config.config)
-      config.merge(first_stage)
-      game.merge(first_stage.fetch(:game,{}))
-      boot.merge(first_stage.dup)
+      first_stage = GameMaster::ConfigLoader.load(config)
+      self.config.merge!(first_stage)
+      self.game.merge!(first_stage.fetch(:game,{}))
+      self.boot.first_stage = first_stage
+      self.boot.boot_method = first_stage[:boot_method]
+      self.boot.boot_data = first_stage[:boot_data]
+
       self
     end
 
     def load_second_stage
-      return unless config.game_dir
-      load_dir_structure(game, config.game_dir)
-    end
-
-    def set_defaults
       if config.game_dir?
         config.game_dir = normalize_game_dir(config.game_dir)
       else
@@ -63,26 +60,46 @@ module GameMaster
       config.game_module      = config.game_module.to_s.upper_camelcase
       config.game_maker_class = false unless config.game_maker_class?
       config.game_maker_class = config.game_maker_class.to_s.upper_camelcase if config.game_maker_class
+      boot.second_stage = config.dup
       self
     end
 
-    def check_validity?
-      check_game_dir? &&
-      check_game_module? &&
-      check_game_class? &&
+    def load_third_stage
+      check_game_dir?
+      check_game_module?
+      check_game_class?
       check_game_maker_class?
+      boot.third_stage = config.dup
+    end
+
+    def load_fourth_stage
+      return self unless config.game_dir
+      load_dir_structure(config.game_dir)
+
+      self
     end
 
     protected
 
     def load_dir_structure(dir)
-      dir.find do |child|
+      return unless dir
+      dir.find.each do |child|
         next if child.directory?
+        next if child == config.game_config_file
         next unless child.to_s =~ /\.ya?ml$/
-        keys = child.each_filename.map(&:to_s)[0..-2]
-        #todo insert read file into slot at keys
+        keys = child.relative_path_from(dir).each_filename.to_a.map(&:intern)[0..-2]
+        insert_file(keys, child)
       end
+    end
 
+    def insert_file(keys, file)
+      insert_into = keys.inject(game){|hash,key| hash = hash[key]}
+      unless insert_into.respond_to?(:merge)
+        raise GameParseError.new("Attempting to load #{file} into game with keys #{keys.inspect}.  But it already has a value of #{insert_into.inspect}")
+      end
+      contents = YAML.load_file(file)
+      runtime.game_files[file.to_s] = contents
+      insert_into.deep_merge! contents
     end
 
     def normalize_game_dir(value)
@@ -101,7 +118,8 @@ module GameMaster
 
     def check_game_dir?
       return :skip if config.game_dir == false #:game_dir as false is a valid value
-      return :dir if config.game_dir.dir? #ok if the path exists and is a directory
+      return :dir if config.game_dir.directory? #ok if the path exists and is
+                                               # a directory
       raise GameParseError.new("No dir found for :game_dir of #{config.game_dir}")
     end
 

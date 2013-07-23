@@ -5,18 +5,18 @@ describe GameMaster do
   let(:no_filename_error){[GameParseError, /^No such file exists/]}
   let(:no_dirname_error){[GameParseError, /^No dir found/]}
   let(:no_game_dir_error){[GameParseError, /^Could not determine :game_dir$/]}
-  let(:no_module_error){[GameParseError, /^Module could not be found/]}
-  let(:no_class_error){[GameParseError, /^Class could not be found/]}
+  let(:no_module_error){[GameParseError, /^game_module could not be found/]}
+  let(:no_class_error){[GameParseError, /^game_class could not be found/]}
 
   describe ".game_from" do
     shared_examples "a game object" do
       it "and a game object" do
-        game.should be_a GameMaster::Game
-        game.config.should be_a Hashery::OpenCascade
-        game.config.has_key?(:game_dir)        .should be_true
-        game.config.has_key?(:game_name)       .should be_true
-        game.config.has_key?(:game_module_name).should be_true
-        game.config.has_key?(:game_class_name) .should be_true
+        game.should be_a_kind_of GameMaster::Base
+        game.config.should be_a_kind_of GameMaster::Config
+        game.config.config.has_key?(:game_dir)        .should be_true
+        game.config.config.has_key?(:game_name)       .should be_true
+        game.config.config.has_key?(:game_module).should be_true
+        game.config.config.has_key?(:game_class) .should be_true
       end
     end
 
@@ -42,7 +42,7 @@ describe GameMaster do
     context "when passed yaml string" do
       it_should_behave_like "a game object" do
         let(:game){subject.game_from(yaml_string: TEST_GAME_YAML_STRING,
-                                     config_opts:{game_dir: TEST_GAME_DIR})}
+                                     game_dir: TEST_GAME_DIR)}
       end
     end
 
@@ -56,8 +56,8 @@ describe GameMaster do
     end
 
     context "when passed data that does not include a game_dir" do
-      it "should raise an error" do
-        expect{subject.game_from(yaml_string: "---\n:test: 123")}.to raise_error *no_game_dir_error
+      it "should be galse" do
+        subject.game_from(yaml_string: "---\n:test: 123").config.game_dir.should be_false
       end
     end
 

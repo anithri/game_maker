@@ -11,10 +11,10 @@ module GameMaster
 
     module InstanceMethods
       def initialize(config = {})
-        raise ArgumentError.new("#{self.name} called with #{config.inspect}, but should have been called with a Hash") unless config.is_a?(Hash)
+        raise ArgumentError.new("#{self.class} called with #{config.inspect}, but should have been called with a GameMaster::Config") unless config.is_a?(GameMaster::Config)
         @config = config
         super()
-        config.each do |key, value|
+        config.game.each do |key, value|
           self.send("#{key}=", value) if self.respond_to?("#{key}=")
           self.send("add_#{key}", value) if self.respond_to?("add_#{key}")
         end

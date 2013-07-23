@@ -69,7 +69,7 @@ module GameMaster
   end
 
   def self.mk_game(config)
-    config[:_game_class].new(config)
+    config.runtime.game_maker_class.new(config)
   end
 
   def self.check_game_dir(dir)
