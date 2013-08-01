@@ -33,11 +33,14 @@ module GameMaster
   # @raise GameParseError if a problem happens during any stage of the Config Load Stage
   # @raise GameDefinitionError if a problem happens while creating a game from the Config
   # @return [Game]
-  def self.game_from(opts, config = {}, game = {})
+  def self.game_from(config: {}, game: {}, runtime: {}, filename: nil, dirname: nil)
+    config[:filename] ||= filename if filename
+    config[:dirname] ||= dirname if dirname
+
     Yell.new :stdout, name: "GameMaster"
     Yell::Repository.loggers.default = Yell["GameMaster"]
-
-    game_config = GameMaster::ConfigLoader.load(opts, config, game)
+    runtime[:logger] ||= Yell["GameMaster"]
+    game_config = GameMaster::ConfigLoader.load(config, game, runtime)
     mk_game(game_config)
   end
 

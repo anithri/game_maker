@@ -24,5 +24,12 @@ module ::TestGame
   class Game
     include GameMaster::Master
   end
+  class GameMaker
+  end
 end
 
+module TestGameNoMaker
+  class TestGame
+    include GameMaster::Master
+  end
+end

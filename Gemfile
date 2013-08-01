@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 # Specify your gem's dependencies in ruzo.gemspec
 gemspec
 gem 'hashery'
-gem 'hash-deep-merge'
+gem 'deep_merge'
 gem 'facets'
 gem 'yell'
 gem 'attrio', path: '../attrio'

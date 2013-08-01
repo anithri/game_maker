@@ -3,29 +3,28 @@ require 'hashery'
 
 module GameMaster
   class Config
-    attr_reader :boot, :config, :game, :runtime
+    attr_reader :game, :loader, :runtime
 
     CONTAINER = Hashery::OpenCascade
 
-    def initialize(boot = {},config = {},game = {},runtime = {})
-      raise ArgumentError unless [boot,config,game,runtime].all?{|e| e.is_a?(Hash)}
-      boot[:original_config] = config.dup
 
-      @boot    = mk_container(boot)
-      @config  = mk_container(config)
+    def initialize(game,loader,runtime)
+      raise ArgumentError unless [game,loader,runtime].all?{|e| e.is_a?(Hash)}
       @game    = mk_container(game)
+      @loader  = mk_container(loader)
       @runtime = mk_container(runtime)
-
     end
 
+
+    def boot
+      runtime.boot
+    end
+
+
+
+    private
     def mk_container(initial_hash = {})
       CONTAINER[initial_hash]
-    end
-
-    def set_boot_stage(stage_name)
-      boot.send(stage_name).config  = config.dup
-      boot.send(stage_name).game    = game.dup
-      boot.send(stage_name).runtime = runtime.dup
     end
 
   end
