@@ -5,7 +5,6 @@ module GameMaster
 
         def self.load(config_obj)
           ngc = self.new(config_obj)
-
           ngc.normalize_name
           ngc.normalize_class
           config_obj.boot.stage.normalize_game_maker_class.success = true
@@ -40,10 +39,13 @@ module GameMaster
         end
 
         def normalize_class
-          if game_class? && game_class
-            loader.game_class = parse_class(game_class,game_module)
+          if game_maker_class? && game_maker_class
+            loader.game_maker_class = parse_class(game_maker_class, game_module)
           elsif game_maker_class_name? && game_maker_class_name
-            loader.game_class = parse_class(game_maker_class_name,game_module)
+            loader.game_maker_class = parse_class(game_maker_class_name,game_module)
+          elsif game_class? && game_class
+            maker_class = game_class.to_s.split(/::/).last + "Maker"
+            loader.game_class = parse_class(maker_class,game_module)
           else
             loader.game_class = false
           end

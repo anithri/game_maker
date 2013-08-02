@@ -14,7 +14,7 @@ describe GameMaster::ConfigLoader::Stages::NormalizeGameMakerClass do
     let(:final_class_name){final_class ? "GameMaker" : false}
     shared_examples "a game_maker_class" do
       it{do_load.loader.game_maker_class_name.should eq final_class_name}
-      it{binding.pry;do_load.loader.game_maker_class.should eq final_class}
+      it{do_load.loader.game_maker_class.should eq final_class}
       it{do_load.boot.stage.normalize_game_maker_class.success.should be_true}
     end
 
@@ -96,7 +96,7 @@ describe GameMaster::ConfigLoader::Stages::NormalizeGameMakerClass do
         let(:final_class){false}
         it_behaves_like "a game_maker_class"
       end
-      context "with game_module defined TestGame", focus: true do
+      context "with game_module defined TestGame" do
         let(:loader_opts){{game_module: TestGame, game_class: TestGame::Game}}
         it_behaves_like "a game_maker_class"
       end

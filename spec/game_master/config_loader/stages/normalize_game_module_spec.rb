@@ -18,6 +18,19 @@ describe GameMaster::ConfigLoader::Stages::NormalizeGameModule do
       it{do_load.boot.stage.normalize_game_module.success.should be_true}
     end
 
+    context "returns a false value" do
+
+    end
+
+    context "returns a module" do
+
+    end
+
+    context "" do
+
+    end
+
+
     context "using name based determination" do
       context "with no game_module_name defined" do
         let(:final_module){false}

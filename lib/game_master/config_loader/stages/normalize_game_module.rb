@@ -14,13 +14,17 @@ module GameMaster
 
           def normalize_name(config_obj)
             if config_obj.loader.game_module_name?
+              config_obj.boot.stage.normalize_game_module.name_source = :game_module_name
               config_obj.loader.game_module_name = self.determine_module(config_obj.loader.game_module_name)
             elsif config_obj.loader.game_module? && config_obj.loader.game_module
+              config_obj.boot.stage.normalize_game_module.name_source = :game_module
               config_obj.loader.game_module_name = self.determine_module(config_obj.loader.game_module)
             elsif config_obj.loader.game_name? && config_obj.loader.game_name
+              config_obj.boot.stage.normalize_game_module.name_source = :game_name
               config_obj.loader.game_module_name = config_obj.loader.game_name
               self.normalize_name(config_obj)
             else
+              config_obj.boot.stage.normalize_game_module.name_source = :no_value
               config_obj.loader.game_module_name = false
             end
           end
