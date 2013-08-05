@@ -7,6 +7,7 @@ gem 'deep_merge'
 gem 'facets'
 gem 'yell'
 gem 'attrio', path: '../attrio'
+gem 'naught'
 group :development do
   gem 'irbtools', require: false
   gem 'bond', require: false

@@ -33,3 +33,12 @@ module TestGameNoMaker
     include GameMaster::Master
   end
 end
+
+module TestGameSpecial
+  class MyGame
+    include GameMaster::Master
+  end
+  class MyGameMaker
+    include GameMaster::Master
+  end
+end

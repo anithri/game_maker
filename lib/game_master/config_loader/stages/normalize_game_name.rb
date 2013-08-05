@@ -3,24 +3,16 @@ module GameMaster
     module Stages
       module NormalizeGameName
         class << self
-
           def load(config_obj)
-            if config_obj.loader.game_name?
-              config_obj.loader.game_name = determine_game_name(config_obj.loader.game_name)
-            elsif config_obj.loader.game_dir? && config_obj.loader.game_dir
-              config_obj.loader.game_name = determine_game_name(config_obj.loader.game_dir)
+            if config_obj.loader.game_name? && config_obj.loader.game_name?.to_s.length > 1
+              config_obj.loader.game_name = config_obj.loader.game_name.to_s.snakecase.titlecase
+            elsif config_obj.loader.game_dir?
+              config_obj.loader.game_name = config_obj.loader.game_dir.basename.to_s.snakecase.titlecase
             else
-              config_obj.loader.game_name = false
+              raise GameParseError, "No Game Name determined from initial config.  It is required, and defaults to the name of the game_dir"
             end
             config_obj.boot.stage.normalize_game_name.success = true
-            config_obj
-          end
-
-          def determine_game_name(name)
-            return false unless name
-            return false if name.to_s.empty?
-            return name.basename.to_s.snakecase.titlecase if name.is_a?(Pathname)
-            return name.to_s.snakecase.titlecase
+            return config_obj
           end
         end
       end

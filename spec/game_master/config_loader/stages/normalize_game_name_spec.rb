@@ -15,23 +15,26 @@ describe GameMaster::ConfigLoader::Stages::NormalizeGameName do
       it{do_load.loader.game_name.should eq final_name}
       it{do_load.boot.stage.second_stage.success.should be_true}
     end
+    shared_examples "a bad game_name" do
+      it{expect{do_load}.to raise_error GameParseError, /^No Game Name/}
+    end
 
     context "returns a false value" do
       let(:final_name){false}
       context "with no game_name defined" do
-        it_behaves_like "a game_name"
+        it_behaves_like "a bad game_name"
       end
       context "with game_name defined false" do
         let(:loader_opts){{game_name: false}}
-        it_behaves_like "a game_name"
+        it_behaves_like "a bad game_name"
       end
       context "with game_name defined nil" do
         let(:loader_opts){{game_name: nil}}
-        it_behaves_like "a game_name"
+        it_behaves_like "a bad game_name"
       end
       context "with game_name defined ''" do
         let(:loader_opts){{game_name: ''}}
-        it_behaves_like "a game_name"
+        it_behaves_like "a bad game_name"
       end
     end
     context "returns a name" do

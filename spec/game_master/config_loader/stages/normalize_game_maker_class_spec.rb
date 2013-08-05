@@ -11,95 +11,53 @@ describe GameMaster::ConfigLoader::Stages::NormalizeGameMakerClass do
 
   context ".load" do
     let(:final_class){TestGame::GameMaker}
-    let(:final_class_name){final_class ? "GameMaker" : false}
     shared_examples "a game_maker_class" do
-      it{do_load.loader.game_maker_class_name.should eq final_class_name}
       it{do_load.loader.game_maker_class.should eq final_class}
       it{do_load.boot.stage.normalize_game_maker_class.success.should be_true}
     end
-
-    context "using name based determination" do
-      context "with no game_maker_class_name defined" do
-        let(:final_class){false}
-        it_behaves_like "a game_maker_class"
-      end
-      context "with game_maker_class_name defined false" do
-        let(:loader_opts){{game_maker_class_name: false}}
-        let(:final_class){false}
-        it_behaves_like "a game_maker_class"
-      end
-      context "with game_maker_class_name defined nil" do
-        let(:loader_opts){{game_maker_class_name: nil}}
-        let(:final_class){false}
-        it_behaves_like "a game_maker_class"
-      end
-      context "with game_maker_class_name defined ''" do
-        let(:loader_opts){{game_maker_class_name: ''}}
-        let(:final_class){false}
-        it_behaves_like "a game_maker_class"
-      end
-      context "with game_maker_class_name defined 'test_game'" do
-        let(:loader_opts){{game_module: TestGame,game_maker_class_name: 'game_maker'}}
-        it_behaves_like "a game_maker_class"
-      end
-      context "with game_maker_class_name defined 'TestGame'" do
-        let(:loader_opts){{game_module: TestGame,game_maker_class_name: 'GameMaker'}}
-        it_behaves_like "a game_maker_class"
-      end
-      context "with game_maker_class_name defined TestGame" do
-        let(:loader_opts){{game_module: TestGame,game_maker_class_name: TestGame::Game}}
-        it_behaves_like "a game_maker_class"
-      end
-      context "with game_maker_class_name that doesn't exist" do
-        let(:loader_opts){{game_module: TestGame,game_maker_class_name: 'test_game_stuff'}}
-        it{expect{do_load}.to raise_error GameParseError}
-      end
+    shared_examples "a game_maker error raiser" do
+      it{expect{do_load}.to raise_error GameParseError, /^Couldn't find class/}
     end
 
-    context "using class based determination" do
-      context "with game_class defined false" do
-        let(:loader_opts){{game_class: false, game_module: TestGame}}
-        let(:final_class){TestGame::Game}
-        it_behaves_like "a game_maker_class"
-      end
-      context "with game_class defined nil" do
-        let(:loader_opts){{game_class: nil, game_module: TestGame}}
-        let(:final_class){TestGame::Game}
-        it_behaves_like "a game_maker_class"
-      end
-      context "with game_class defined 'game'" do
-        let(:loader_opts){{game_class: 'game', game_module: TestGame}}
-        it_behaves_like "a game_maker_class"
-      end
-      context "with game_class defined 'Game'" do
-        let(:loader_opts){{game_class: 'Game', game_module: TestGame}}
-        it_behaves_like "a game_maker_class"
-      end
-      context "with game_class defined TestGame::Game" do
-        let(:loader_opts){{game_class: TestGame::Game, game_module: TestGame}}
-        it_behaves_like "a game_maker_class"
-      end
-      context "with game_class that doesn't exist" do
-        let(:loader_opts){{game_class: 'test_game_stuff',game_module: TestGame}}
-        it{expect{do_load}.to raise_error GameParseError}
-      end
+    context "with no game_maker_class defined" do
+      let(:loader_opts){{game_class: TestGame::Game, game_module: TestGame}}
+      it_behaves_like "a game_maker_class"
+    end
+    context "with game_maker_class defined as false" do
+      let(:loader_opts){{game_class: TestGame::Game, game_module: TestGame, game_maker_class: false}}
+      it_behaves_like "a game_maker_class"
+    end
+    context "with game_maker_class defined as nil" do
+      let(:loader_opts){{game_class: TestGame::Game, game_module: TestGame, game_maker_class: nil}}
+      it_behaves_like "a game_maker_class"
+    end
+    context "with game_maker_class defined as ''" do
+      let(:loader_opts){{game_class: TestGame::Game, game_module: TestGame, game_maker_class: ''}}
+      it_behaves_like "a game_maker error raiser"
+    end
+    context "with game_maker_class defined as 'game_maker'" do
+      let(:loader_opts){{game_class: TestGame::Game, game_module: TestGame, game_maker_class: 'game_maker'}}
+      it_behaves_like "a game_maker_class"
+    end
+    context "with game_maker_class defined as 'Game Maker'" do
+      let(:loader_opts){{game_class: TestGame::Game, game_module: TestGame, game_maker_class: 'Game Maker'}}
+      it_behaves_like "a game_maker_class"
+    end
+    context "with game_maker_class defined as 'GameMaker'" do
+      let(:loader_opts){{game_class: TestGame::Game, game_module: TestGame, game_maker_class: 'GameMaker'}}
+      it_behaves_like "a game_maker_class"
+    end
+    context "with game_maker_class defined as 'GameMakerFake'" do
+      let(:loader_opts){{game_class: TestGame::Game, game_module: TestGame, game_maker_class: 'GameMakerFake'}}
+      it_behaves_like "a game_maker error raiser"
+    end
+    context "with TestGameSpecial used" do
+      let(:loader_opts){{game_class: TestGameSpecial::MyGame, game_module: TestGameSpecial}}
+      let(:final_class){TestGameSpecial::MyGameMaker}
+      it_behaves_like "a game_maker_class"
+
     end
 
-    context "using game_module based determination" do
-      context "with game_name defined false" do
-        let(:loader_opts){{game_module: false}}
-        let(:final_class){false}
-        it_behaves_like "a game_maker_class"
-      end
-      context "with game_module defined nil" do
-        let(:loader_opts){{game_module: nil}}
-        let(:final_class){false}
-        it_behaves_like "a game_maker_class"
-      end
-      context "with game_module defined TestGame" do
-        let(:loader_opts){{game_module: TestGame, game_class: TestGame::Game}}
-        it_behaves_like "a game_maker_class"
-      end
-    end
+
   end
 end
