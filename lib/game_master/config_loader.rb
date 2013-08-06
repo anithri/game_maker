@@ -13,12 +13,13 @@ module GameMaster
 
     STAGE_TRACKER = StageTracker.instance
     DEFAULT_STAGES = [
-        ['bootstrap','10'],
-        ['normalize_game_dir','21'],
-        ['normalize_game_name','22'],
-        ['normalize_game_module','23'],
-        ['normalize_game_class','24'],
-        ['normalize_game_maker_class','25'],
+        ['bootstrap',                 10],
+        ['normalize_game_dir',        21],
+        ['normalize_game_name',       22],
+        ['normalize_game_module',     23],
+        ['normalize_game_class',      24],
+        ['normalize_game_maker_class',25],
+        ['game_loader',               100]
     ]
     def self.load(game, loader, runtime)
       config_loader = Base.new(STAGE_TRACKER)
