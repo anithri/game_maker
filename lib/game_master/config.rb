@@ -15,16 +15,27 @@ module GameMaster
       @runtime = mk_container(runtime)
     end
 
-
     def boot
       runtime.boot
     end
 
+    def merge_from_file(file, parent_keys = [])
+      return if boot.game_files.include?(file)
+      contents = YAML.load_file(file)
+      if merge_at_root?(contents)
 
+      else
+
+      end
+    end
 
     private
     def mk_container(initial_hash = {})
       CONTAINER[initial_hash]
+    end
+
+    def merge_at_root?(hash)
+      ([:game,:loader,:runtime] & hash.keys).count > 0
     end
 
   end

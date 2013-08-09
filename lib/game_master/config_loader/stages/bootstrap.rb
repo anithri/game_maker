@@ -32,6 +32,7 @@ module GameMaster
             config_obj.boot.stage.first_stage.data = filename
             config_obj.loader.game_dir         = file.dirname
             config_obj.loader.game_config_file = file
+            config_obj.boot.game_files = [file]
 
             self.merge_contents(contents, config_obj)
           end

@@ -3,23 +3,23 @@ require 'spec_helper'
 describe GameMaster::Config do
   subject{GameMaster::Config}
 
-  #describe "#initialize" do
-  #  context "when passed no options" do
-  #    let(:game_config){subject.new}
-  #    it{game_config.should be_a GameMaster::Config}
-  #    it{game_config.boot.   should be_a GameMaster::Config::CONTAINER}
-  #    it{game_config.config. should be_a GameMaster::Config::CONTAINER}
-  #    it{game_config.game .  should be_a GameMaster::Config::CONTAINER}
-  #    it{game_config.runtime.should be_a GameMaster::Config::CONTAINER}
-  #  end
-  #  context "when passed options" do
-  #    let(:game_config){subject.new({foo: 123},{game_dir: "/tmp"},{foo: 456},{foo: 789})}
-  #    it{game_config.config.game_dir.should eq "/tmp"}
-  #    it{game_config.boot.foo.should eq 123}
-  #    it{game_config.game.foo.should eq 456}
-  #    it{game_config.runtime.foo.should eq 789}
-  #  end
-  #end
+  describe "#initialize" do
+    context "when passed no options" do
+      let(:game_config){subject.new({},{},{})}
+                                                it{game_config.should be_a GameMaster::Config}
+      it{game_config.boot.   should be_a GameMaster::Config::CONTAINER}
+      it{game_config.config. should be_a GameMaster::Config::CONTAINER}
+      it{game_config.game .  should be_a GameMaster::Config::CONTAINER}
+      it{game_config.runtime.should be_a GameMaster::Config::CONTAINER}
+    end
+    context "when passed options" do
+      let(:game_config){subject.new({foo: 123},{game_dir: "/tmp"},{foo: 456},{foo: 789})}
+      it{game_config.config.game_dir.should eq "/tmp"}
+      it{game_config.boot.foo.should eq 123}
+      it{game_config.game.foo.should eq 456}
+      it{game_config.runtime.foo.should eq 789}
+    end
+  end
 end
 
 __END__
